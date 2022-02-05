@@ -10,13 +10,18 @@ class Process:
         self.tree = Tree()
 
     def execute(self):
-        pass
+        try:
+            step = self.tree.get_node(self.tree.root).data
+            return step.execute()
+        except AttributeError:
+            #should never happen if a step was added
+            pass
 
     def add_step(self, step: Step):
-        self.tree.create_node(step, step.get_name(), parent=self.last_added)
+        self.tree.create_node(step.get_name(), step.get_name(), data=step, parent=self.last_added)
         self.last_added = step
 
     def add_step(self, step: Step, gate):
-        self.tree.create_node(step, step.get_name(), parent=self.last_added)
+        self.tree.create_node(step.get_name(), step.get_name(), data=step, parent=self.last_added)
 
         self.last_added = step.get_name()

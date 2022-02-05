@@ -6,6 +6,6 @@ from src.process.step.get_request_step import GetRequestStep
 from src.response.ok_response import OkResponse
 
 process = Process()
-process.add_step(GetRequestStep(), OkResponse())
+process.add_step(GetRequestStep('http://localhost:8080/'), OkResponse())
 
-
+process.execute()
