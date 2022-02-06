@@ -1,4 +1,6 @@
-class FalseGate:
-    def gate(self, expression, next_gate):
-        if not expression():
-            next_gate()
+from src.gate.gate import Gate
+
+
+class FalseGate(Gate):
+    def gate(self, expression) -> bool:
+        return not expression()

@@ -1,4 +1,7 @@
-class TrueGate:
-    def gate(self, expression, next_gate):
-        if expression():
-            next_gate()
+from src.gate.gate import Gate
+
+
+class TrueGate(Gate):
+    def gate(self, expression) -> bool:
+        return expression()
+

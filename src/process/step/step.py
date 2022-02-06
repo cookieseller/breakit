@@ -6,5 +6,9 @@ class Step(ABC):
         return type(self).__name__
 
     @abstractmethod
+    def get_identifier(self) -> str:
+        pass
+
+    @abstractmethod
     def execute(self):
         pass

@@ -1,3 +1,5 @@
+from typing import Final
+
 from treelib import Tree
 
 from src.process.step.step import Step
@@ -5,23 +7,29 @@ from src.process.step.step import Step
 
 class Process:
 
-    def __init__(self) -> None:
-        self.last_added = None
-        self.tree = Tree()
+    ROOT_IDENTIFIER: Final[str] = "root"
 
-    def execute(self):
+    def __init__(self) -> None:
+        self.tree = Tree()
+        self.root = self.tree.create_node(identifier=self.ROOT_IDENTIFIER)
+        self.last_added_identifier = self.ROOT_IDENTIFIER
+
+    def execute(self) -> None:
         try:
-            step = self.tree.get_node(self.tree.root).data
-            return step.execute()
+            for step in self.tree.children(self.ROOT_IDENTIFIER):
+                step.data.execute()
         except AttributeError:
             #should never happen if a step was added
             pass
 
-    def add_step(self, step: Step):
-        self.tree.create_node(step.get_name(), step.get_name(), data=step, parent=self.last_added)
-        self.last_added = step
+    def add_next_step(self, step: Step, gate) -> None:
+        self.tree.create_node(step.get_name(), step.get_identifier(), data=step, parent=self.last_added_identifier)
+        self.last_added_identifier = step.get_identifier()
 
-    def add_step(self, step: Step, gate):
-        self.tree.create_node(step.get_name(), step.get_name(), data=step, parent=self.last_added)
+    def add_root_step(self, step: Step, gate) -> None:
+        self.tree.create_node(step.get_name(), step.get_identifier(), data=step, parent=self.ROOT_IDENTIFIER)
+        self.last_added_identifier = step.get_identifier()
 
-        self.last_added = step.get_name()
+    def add_step_after(self, step: Step, previous_step: Step, gate) -> None:
+        self.tree.create_node(step.get_name(), step.get_identifier(), data=step, parent=previous_step.get_identifier())
+        self.last_added_identifier = step.get_identifier()
