@@ -25,22 +25,34 @@ class Process:
             #should never happen if a step was added
             pass
 
-    def add_next_step(self, step: Step, gate) -> None:
-        self.tree.create_node(step.get_name(), step.get_identifier(), data=self._ProcessStep(step, gate), parent=self.last_added_identifier)
+    def add_next_step(self, step: Step):
+        process_step = self.ProcessStep(step)
+        self.tree.create_node(step.get_name(), step.get_identifier(), data=process_step, parent=self.last_added_identifier)
         self.last_added_identifier = step.get_identifier()
 
-    def add_root_step(self, step: Step, gate) -> None:
-        self.tree.create_node(step.get_name(), step.get_identifier(), data=self._ProcessStep(step, gate), parent=self.ROOT_IDENTIFIER)
+        return process_step
+
+    def add_root_step(self, step: Step):
+        process_step = self.ProcessStep(step)
+        self.tree.create_node(step.get_name(), step.get_identifier(), data=process_step, parent=self.ROOT_IDENTIFIER)
         self.last_added_identifier = step.get_identifier()
 
-    def add_step_after(self, step: Step, previous_step: Step, gate) -> None:
-        self.tree.create_node(step.get_name(), step.get_identifier(), data=self._ProcessStep(step, gate), parent=previous_step.get_identifier())
+        return process_step
+
+    def add_step_after(self, step: Step, previous_step: Step):
+        process_step = self.ProcessStep(step)
+        self.tree.create_node(step.get_name(), step.get_identifier(), data=process_step, parent=previous_step.get_identifier())
         self.last_added_identifier = step.get_identifier()
 
-    class _ProcessStep:
-        def __init__(self, step: Step, gate: Gate) -> None:
+        return process_step
+
+    class ProcessStep:
+        def __init__(self, step: Step) -> None:
             super().__init__()
             self.step = step
+            self.gate = None
+
+        def add_expected_response(self, gate: Gate):
             self.gate = gate
 
         def get_step(self):
