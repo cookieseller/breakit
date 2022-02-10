@@ -21,7 +21,10 @@ class Process:
             for step in self.tree.children(self.ROOT_IDENTIFIER):
                 process_data = step.data
                 result = process_data.get_step().execute()
-                process_data.get_gate().gate(result)
+                for gate in process_data.get_gates():
+                    if gate.gate(result):
+                        self.tree.children(step.get_identifier())
+
         except AttributeError:
             #should never happen if a step was added
             pass
@@ -59,13 +62,13 @@ class Process:
         def __init__(self, step: Step) -> None:
             super().__init__()
             self.step = step
-            self.gate = None
+            self.gates = []
 
         def add_expected_response(self, gate: Gate):
-            self.gate = gate
+            self.gates.append(gate)
 
         def get_step(self):
             return self.step
 
-        def get_gate(self):
-            return self.gate
+        def get_gates(self):
+            return self.gates
