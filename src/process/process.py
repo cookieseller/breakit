@@ -1,6 +1,7 @@
 from typing import Final
 
 from treelib import Tree
+from treelib.exceptions import DuplicatedNodeIdError
 
 from src.gate.gate import Gate
 from src.process.step.step import Step
@@ -25,13 +26,6 @@ class Process:
             #should never happen if a step was added
             pass
 
-    def add_next_step(self, step: Step):
-        process_step = self.ProcessStep(step)
-        self.tree.create_node(step.get_name(), step.get_identifier(), data=process_step, parent=self.last_added_identifier)
-        self.last_added_identifier = step.get_identifier()
-
-        return process_step
-
     def add_root_step(self, step: Step):
         process_step = self.ProcessStep(step)
         self.tree.create_node(step.get_name(), step.get_identifier(), data=process_step, parent=self.ROOT_IDENTIFIER)
@@ -39,9 +33,24 @@ class Process:
 
         return process_step
 
+    def add_next_step(self, step: Step):
+        process_step = self.ProcessStep(step)
+        try:
+            self.tree.create_node(step.get_name(), step.get_identifier(), data=process_step, parent=self.last_added_identifier)
+        except DuplicatedNodeIdError:
+            pass  # This step already existed, don't add it again
+
+        self.last_added_identifier = step.get_identifier()
+
+        return process_step
+
     def add_step_after(self, step: Step, previous_step: Step):
         process_step = self.ProcessStep(step)
-        self.tree.create_node(step.get_name(), step.get_identifier(), data=process_step, parent=previous_step.get_identifier())
+        try:
+            self.tree.create_node(step.get_name(), step.get_identifier(), data=process_step, parent=previous_step.get_identifier())
+        except DuplicatedNodeIdError:
+            pass  # This step already existed, don't add it again
+
         self.last_added_identifier = step.get_identifier()
 
         return process_step
