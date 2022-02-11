@@ -16,14 +16,14 @@ class Process:
         self.root = self.tree.create_node(identifier=self.ROOT_IDENTIFIER)
         self.last_added_identifier = self.ROOT_IDENTIFIER
 
-    def execute(self) -> None:
+    def execute(self, node_identifier: str = ROOT_IDENTIFIER) -> None:
         try:
-            for step in self.tree.children(self.ROOT_IDENTIFIER):
+            for step in self.tree.children(node_identifier):
                 process_data = step.data
                 result = process_data.get_step().execute()
                 for gate in process_data.get_gates():
                     if gate.gate(result):
-                        self.tree.children(step.get_identifier())
+                        self.execute(process_data.get_step().get_identifier())
 
         except AttributeError:
             #should never happen if a step was added
