@@ -1,3 +1,4 @@
+import os
 import socketserver
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
@@ -7,12 +8,17 @@ serverPort = 8080
 
 class Server(BaseHTTPRequestHandler):
 
+    def default(self):
+        pass
 
     def do_GET(self):
         routes = {
-            "/":        {"message": "Hello World", "status": 200},
-            "/test":    {"message": "Invalid World", "status": 400},
-            "/goodbye": {"message": "Goodbye World", "status": 200}
+            "/":        {"function": self.default, "message": "Hello World", "status": 200},
+            "/test":    {"function": self.default, "message": "Invalid World", "status": 400},
+            "/goodbye": {"function": self.default, "message": "Goodbye World", "status": 200},
+            "/create":  {"function": self.default, "message": "Goodbye World", "status": 200},
+            "/delete":  {"function": self.default, "message": "Goodbye World", "status": 200},
+            "/exists":  {"function": self.default, "message": "Goodbye World", "status": 200}
         }
 
         self.send_response(routes[self.path]["status"])
@@ -26,6 +32,9 @@ class Server(BaseHTTPRequestHandler):
 
 
 if __name__ == "__main__":
+    if os.path.exists('tokens'):
+        os.remove("tokens")
+
     webServer = HTTPServer((hostName, serverPort), Server)
     print("Server started http://%s:%s" % (hostName, serverPort))
 
