@@ -8,7 +8,15 @@ serverPort = 8080
 
 class Server(BaseHTTPRequestHandler):
 
-    def default(self):
+    def default(self, status, message):
+        self.send_response(status)
+        self.send_header("Content-type", "text/html")
+        self.end_headers()
+        self.wfile.write(bytes("<tml><head><title>Breakit flow test server</title></head>", "utf-8"))
+        self.wfile.write(bytes("<p>Request: %s</p>" % self.path, "utf-8"))
+        self.wfile.write(bytes("<body>", "utf-8"))
+        self.wfile.write(bytes(f"<p> {message}.</p>", "utf-8"))
+        self.wfile.write(bytes("</body></html>", "utf-8"))
         pass
 
     def do_GET(self):
@@ -21,14 +29,7 @@ class Server(BaseHTTPRequestHandler):
             "/exists":  {"function": self.default, "message": "Goodbye World", "status": 200}
         }
 
-        self.send_response(routes[self.path]["status"])
-        self.send_header("Content-type", "text/html")
-        self.end_headers()
-        self.wfile.write(bytes("<tml><head><title>Breakit flow test server</title></head>", "utf-8"))
-        self.wfile.write(bytes("<p>Request: %s</p>" % self.path, "utf-8"))
-        self.wfile.write(bytes("<body>", "utf-8"))
-        self.wfile.write(bytes(f"<p> {routes[self.path]['message']}.</p>", "utf-8"))
-        self.wfile.write(bytes("</body></html>", "utf-8"))
+        routes[self.path]["function"](routes[self.path]['status'], routes[self.path]['message'])
 
 
 if __name__ == "__main__":
