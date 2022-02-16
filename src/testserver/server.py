@@ -1,6 +1,7 @@
 import os
 import socketserver
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from urllib.parse import parse_qs, urlparse
 
 hostName = "localhost"
 serverPort = 8080
@@ -20,6 +21,7 @@ class Server(BaseHTTPRequestHandler):
         pass
 
     def do_GET(self):
+        query_components = parse_qs(urlparse(self.path).query)
         routes = {
             "/":        {"function": self.default, "message": "Hello World", "status": 200},
             "/test":    {"function": self.default, "message": "Invalid World", "status": 400},
@@ -29,7 +31,7 @@ class Server(BaseHTTPRequestHandler):
             "/exists":  {"function": self.default, "message": "Goodbye World", "status": 200}
         }
 
-        routes[self.path]["function"](routes[self.path]['status'], routes[self.path]['message'])
+        routes[self.path]["function"](routes[self.path]['status'], routes[self.path]['message'], query_components)
 
 
 if __name__ == "__main__":
