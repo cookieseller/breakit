@@ -1,13 +1,32 @@
 import os
 import socketserver
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from typing import Type
 from urllib.parse import parse_qs, urlparse
+
+from src.testserver.TestingRouter.TestingRouter import TestingRouter
+from src.testserver.routing.Route import Route
+from src.testserver.routing.Router import Router
 
 hostName = "localhost"
 serverPort = 8080
 
 
 class Server(BaseHTTPRequestHandler):
+
+    routes = {
+        'GET': {},
+        'POST': {},
+        'DELETE': {},
+    }
+
+    @staticmethod
+    def register_routes(routers: list[Router]):
+        for router in routers:
+            routes = router.get_routes()
+            Server.routes['GET'] |= routes['GET']
+            Server.routes['POST'] |= routes['POST']
+            Server.routes['DELETE'] |= routes['DELETE']
 
     def default(self, status, message):
         self.send_response(status)
@@ -20,18 +39,14 @@ class Server(BaseHTTPRequestHandler):
         self.wfile.write(bytes("</body></html>", "utf-8"))
         pass
 
+    def get_route(self, method: str, path: str) -> Type[Route]:
+        return Server.routes[method][path]
+
     def do_GET(self):
         query_components = parse_qs(urlparse(self.path).query)
-        routes = {
-            "/":        {"function": self.default, "message": "Hello World", "status": 200},
-            "/test":    {"function": self.default, "message": "Invalid World", "status": 400},
-            "/goodbye": {"function": self.default, "message": "Goodbye World", "status": 200},
-            "/create":  {"function": self.default, "message": "Goodbye World", "status": 200},
-            "/delete":  {"function": self.default, "message": "Goodbye World", "status": 200},
-            "/exists":  {"function": self.default, "message": "Goodbye World", "status": 200}
-        }
 
-        routes[self.path]["function"](routes[self.path]['status'], routes[self.path]['message'], query_components)
+        route = self.get_route('GET', self.path)
+        route().execute(query_components)
 
 
 if __name__ == "__main__":
@@ -39,6 +54,7 @@ if __name__ == "__main__":
         os.remove("tokens")
 
     webServer = HTTPServer((hostName, serverPort), Server)
+    Server.register_routes([TestingRouter()])
     print("Server started http://%s:%s" % (hostName, serverPort))
 
     try:
