@@ -1,5 +1,6 @@
 from src.testserver.routing.Route import Route
 from src.testserver.routing.Router import Router
+from src.testserver.routing.route_response import RouteResponse
 
 
 class TestingRouter(Router):
@@ -14,9 +15,9 @@ class TestingRouter(Router):
         }
 
     class Default(Route):
-        def execute(self, params: str):
-            pass
+        def execute(self, params: str) -> RouteResponse:
+            return RouteResponse(200, 'My default route')
 
     class Test(Route):
-        def execute(self, params: str):
-            pass
+        def execute(self, params: str) -> RouteResponse:
+            return RouteResponse(200, 'My Test route')
