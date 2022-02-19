@@ -1,3 +1,4 @@
+import json
 import os
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from typing import Type
@@ -34,25 +35,20 @@ class Server(BaseHTTPRequestHandler):
 
     def write_response(self, route_response: RouteResponse):
         self.send_response(route_response.response_code)
-        self.send_header("Content-type", "text/html")
+        self.send_header("Content-type", "application/json")
         self.end_headers()
-        self.wfile.write(bytes("<tml><head><title>Breakit flow test server</title></head>", "utf-8"))
-        self.wfile.write(bytes("<p>Request: %s</p>" % self.path, "utf-8"))
-        self.wfile.write(bytes("<body>", "utf-8"))
-        self.wfile.write(bytes(f"<p> {route_response.response_message}.</p>", "utf-8"))
-        self.wfile.write(bytes("</body></html>", "utf-8"))
+        self.wfile.write(json.dumps(route_response.response_json).encode('utf-8'))
 
     def do_GET(self):
-        query_components = parse_qs(urlparse(self.path).query)
+        parsed_url = urlparse(self.path)
+        query_components = parse_qs(parsed_url.query)
 
-        route = self.get_route('GET', self.path)
+        route = self.get_route('GET', parsed_url.path)
         route_response = route().execute(query_components)
         self.write_response(route_response)
 
 
 if __name__ == "__main__":
-    if os.path.exists('tokens'):
-        os.remove("tokens")
 
     webServer = HTTPServer((hostName, serverPort), Server)
     Server.register_routes([TestingRouter()])
