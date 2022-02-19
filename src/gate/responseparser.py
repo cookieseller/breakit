@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class Gate(ABC):
+class ResponseParser(ABC):
     @abstractmethod
     def gate(self, expression) -> bool:
         pass

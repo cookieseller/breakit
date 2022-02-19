@@ -17,9 +17,7 @@ class TestingRouter(Router):
                 "/validatetoken": TestingRouter.ValidateToken,
                 "/end":           TestingRouter.End,
             },
-            'POST':   {
-                "/validatetoken": TestingRouter.ValidateToken,
-            },
+            'POST':   {},
             'DELETE': {},
         }
 

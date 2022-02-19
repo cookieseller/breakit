@@ -3,7 +3,7 @@ from typing import Final
 from treelib import Tree
 from treelib.exceptions import DuplicatedNodeIdError
 
-from src.gate.gate import Gate
+from src.gate.responseparser import ResponseParser
 from src.process.step.step import Step
 
 
@@ -64,8 +64,13 @@ class Process:
             self.step = step
             self.gates = []
 
-        def add_expected_response(self, gate: Gate):
+        def add_response_handler(self, gate: ResponseParser):
             self.gates.append(gate)
+            return self
+
+        def add_response_parser(self, response_parser: ResponseParser):
+            self.gates.append(response_parser)
+            return self
 
         def get_step(self):
             return self.step

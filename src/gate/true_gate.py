@@ -1,7 +1,7 @@
-from src.gate.gate import Gate
+from src.gate.responseparser import ResponseParser
 
 
-class TrueGate(Gate):
+class TrueGate(ResponseParser):
     def gate(self, expression) -> bool:
         return expression()
 

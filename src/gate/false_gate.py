@@ -1,6 +1,6 @@
-from src.gate.gate import Gate
+from src.gate.responseparser import ResponseParser
 
 
-class FalseGate(Gate):
+class FalseGate(ResponseParser):
     def gate(self, expression) -> bool:
         return not expression()
