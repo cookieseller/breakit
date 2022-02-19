@@ -3,9 +3,9 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from typing import Type
 from urllib.parse import parse_qs, urlparse
 
-from src.testserver.TestingRouter.TestingRouter import TestingRouter
-from src.testserver.routing.Route import Route
-from src.testserver.routing.Router import Router
+from src.testserver.TestingRouter.testing_router import TestingRouter
+from src.testserver.routing.route import Route
+from src.testserver.routing.router import Router
 from src.testserver.routing.route_response import RouteResponse
 
 hostName = "localhost"

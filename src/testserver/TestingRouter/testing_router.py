@@ -1,5 +1,5 @@
-from src.testserver.routing.Route import Route
-from src.testserver.routing.Router import Router
+from src.testserver.routing.route import Route
+from src.testserver.routing.router import Router
 from src.testserver.routing.route_response import RouteResponse
 
 
