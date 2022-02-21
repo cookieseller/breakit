@@ -1,4 +1,4 @@
-from typing import Final
+from typing import Final, List
 
 from treelib import Tree
 from treelib.exceptions import DuplicatedNodeIdError
@@ -21,8 +21,9 @@ class Process:
             for step in self.tree.children(node_identifier):
                 process_data = step.data
                 result = process_data.get_step().execute()
-                for gate in process_data.get_gates():
-                    if gate.gate(result):
+                for response_parser in process_data.get_response_parsers():
+                    response_parser.parse(result)
+                    if response_parser.is_valid():
                         self.execute(process_data.get_step().get_identifier())
 
         except AttributeError:
@@ -62,18 +63,18 @@ class Process:
         def __init__(self, step: Step) -> None:
             super().__init__()
             self.step = step
-            self.gates = []
+            self.response_parsers = []
 
-        def add_response_handler(self, gate: ResponseParser):
-            self.gates.append(gate)
+        def add_response_handler(self, response_parser: ResponseParser):
+            self.response_parsers.append(response_parser)
             return self
 
         def add_response_parser(self, response_parser: ResponseParser):
-            self.gates.append(response_parser)
+            self.response_parsers.append(response_parser)
             return self
 
-        def get_step(self):
+        def get_step(self) -> Step:
             return self.step
 
-        def get_gates(self):
-            return self.gates
+        def get_response_parsers(self) -> List[ResponseParser]:
+            return self.response_parsers

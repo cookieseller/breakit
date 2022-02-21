@@ -3,5 +3,9 @@ from abc import ABC, abstractmethod
 
 class ResponseParser(ABC):
     @abstractmethod
-    def gate(self, expression) -> bool:
+    def parse(self, expression) -> bool:
+        pass
+
+    @abstractmethod
+    def is_valid(self) -> bool:
         pass

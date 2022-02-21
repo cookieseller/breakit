@@ -2,5 +2,11 @@ from src.gate.responseparser import ResponseParser
 
 
 class BadRequestResponseGate(ResponseParser):
-    def gate(self, response) -> bool:
-        return response.status_code == 400
+    def __init__(self):
+        self.status_code = None
+
+    def parse(self, response) -> None:
+        self.status_code = response.status_code
+
+    def is_valid(self) -> bool:
+        return self.status_code == 400
