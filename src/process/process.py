@@ -3,7 +3,7 @@ from typing import Final, List
 from treelib import Tree
 from treelib.exceptions import DuplicatedNodeIdError
 
-from src.gate.responseparser import ResponseParser
+from src.response_parsers.responseparser import ResponseParser
 from src.process.step.step import Step
 
 

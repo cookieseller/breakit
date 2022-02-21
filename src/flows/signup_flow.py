@@ -1,6 +1,6 @@
 # Example of a flow
-from src.gate.bad_request_response_gate import BadRequestResponseGate
-from src.gate.ok_response_gate import OkResponseGate
+from src.response_parsers.bad_request import BadRequestResponseGate
+from src.response_parsers.ok_response import OkResponseGate
 from src.process.process import Process
 from src.process.step.get_request_step import GetRequestStep
 
