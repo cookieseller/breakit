@@ -4,7 +4,7 @@ from treelib import Tree
 from treelib.exceptions import DuplicatedNodeIdError
 
 from src.process.step_validator.step_validator import StepValidator
-from src.response_parsers.response_parser import ResponseParser
+from src.process.response_parsers.response_parser import ResponseParser
 from src.process.step.step import Step
 
 
@@ -24,8 +24,9 @@ class Process:
                 result = process_data.get_step().execute()
                 for response_parser in process_data.get_response_parsers():
                     response_parser.parse(result)
-                    if response_parser.is_valid():
-                        self.execute(process_data.get_step().get_identifier())
+
+                if process_data.get_step_validator().is_valid():
+                    self.execute(process_data.get_step().get_identifier())
 
         except AttributeError:
             #should never happen if a step was added
@@ -65,10 +66,10 @@ class Process:
             super().__init__()
             self.step = step
             self.response_parsers = []
-            self.step_validators = []
+            self.step_validator = None
 
         def add_step_validator(self, step_validator: StepValidator):
-            self.step_validators.append(step_validator)
+            self.step_validator = step_validator
             return self
 
         def add_response_parser(self, response_parser: ResponseParser):
@@ -78,8 +79,8 @@ class Process:
         def get_step(self) -> Step:
             return self.step
 
-        def get_step_validators(self) -> List[StepValidator]:
-            return self.step_validators
+        def get_step_validator(self) -> StepValidator:
+            return self.step_validator
 
         def get_response_parsers(self) -> List[ResponseParser]:
             return self.response_parsers

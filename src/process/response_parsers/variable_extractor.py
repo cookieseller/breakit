@@ -1,4 +1,4 @@
-from src.response_parsers.response_parser import ResponseParser
+from src.process.response_parsers.response_parser import ResponseParser
 
 
 class VariableExtractor(ResponseParser):
