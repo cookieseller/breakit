@@ -3,7 +3,8 @@ from typing import Final, List
 from treelib import Tree
 from treelib.exceptions import DuplicatedNodeIdError
 
-from src.response_parsers.responseparser import ResponseParser
+from src.process.step_validator.step_validator import StepValidator
+from src.response_parsers.response_parser import ResponseParser
 from src.process.step.step import Step
 
 
@@ -64,9 +65,10 @@ class Process:
             super().__init__()
             self.step = step
             self.response_parsers = []
+            self.step_validators = []
 
-        def add_response_handler(self, response_parser: ResponseParser):
-            self.response_parsers.append(response_parser)
+        def add_step_validator(self, step_validator: StepValidator):
+            self.step_validators.append(step_validator)
             return self
 
         def add_response_parser(self, response_parser: ResponseParser):
@@ -75,6 +77,9 @@ class Process:
 
         def get_step(self) -> Step:
             return self.step
+
+        def get_step_validators(self) -> List[StepValidator]:
+            return self.step_validators
 
         def get_response_parsers(self) -> List[ResponseParser]:
             return self.response_parsers

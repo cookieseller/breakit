@@ -1,11 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class ResponseParser(ABC):
-    @abstractmethod
-    def parse(self, expression) -> bool:
-        pass
-
+class StepValidator(ABC):
     @abstractmethod
     def is_valid(self) -> bool:
         pass

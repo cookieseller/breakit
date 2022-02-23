@@ -1,4 +1,4 @@
-from src.response_parsers.responseparser import ResponseParser
+from src.response_parsers.response_parser import ResponseParser
 
 
 class VariableExtractor(ResponseParser):
@@ -6,7 +6,4 @@ class VariableExtractor(ResponseParser):
         self.variables = None
 
     def parse(self, response) -> None:
-        pass
-
-    def is_valid(self) -> bool:
         pass
