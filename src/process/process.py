@@ -25,7 +25,8 @@ class Process:
                 for response_parser in process_data.get_response_parsers():
                     response_parser.parse(result)
 
-                if process_data.get_step_validator().is_valid():
+                step_validator = process_data.get_step_validator()
+                if step_validator(result).is_valid():
                     self.execute(process_data.get_step().get_identifier())
 
         except AttributeError:
@@ -66,10 +67,10 @@ class Process:
             super().__init__()
             self.step = step
             self.response_parsers = []
-            self.step_validator = None
+            self.step_validator_class = None
 
-        def add_step_validator(self, step_validator: StepValidator):
-            self.step_validator = step_validator
+        def add_step_validator(self, step_validator_class: StepValidator):
+            self.step_validator_class = step_validator_class
             return self
 
         def add_response_parser(self, response_parser: ResponseParser):
@@ -80,7 +81,7 @@ class Process:
             return self.step
 
         def get_step_validator(self) -> StepValidator:
-            return self.step_validator
+            return self.step_validator_class
 
         def get_response_parsers(self) -> List[ResponseParser]:
             return self.response_parsers
