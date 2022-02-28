@@ -1,3 +1,5 @@
+import ast
+
 from src.process.response_parsers.response_parser import ResponseParser
 
 
@@ -6,4 +8,5 @@ class VariableExtractor(ResponseParser):
         self.variables = None
 
     def parse(self, response) -> None:
-        pass
+        content = response.content
+        self.variables = ast.literal_eval(content.decode('utf-8'))
