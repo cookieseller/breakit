@@ -22,12 +22,13 @@ class Process:
             for step in self.tree.children(node_identifier):
                 process_data = step.data
                 result = process_data.get_step().execute()
+                parsed_result = {}
                 for response_parser in process_data.get_response_parsers():
                     parser = response_parser()
-                    parser.parse(result)
+                    parsed_result += parser.parse(result)
 
                 step_validator = process_data.get_step_validator()
-                if step_validator(result).is_valid():
+                if step_validator(parsed_result).is_valid():
                     self.execute(process_data.get_step().get_identifier())
 
         except AttributeError:
