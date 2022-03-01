@@ -23,7 +23,8 @@ class Process:
                 process_data = step.data
                 result = process_data.get_step().execute()
                 for response_parser in process_data.get_response_parsers():
-                    response_parser.parse(result)
+                    parser = response_parser()
+                    parser.parse(result)
 
                 step_validator = process_data.get_step_validator()
                 if step_validator(result).is_valid():

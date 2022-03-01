@@ -9,7 +9,7 @@ process = Process()
 process.add_root_step(GetRequestStep('http://localhost:8080/')).add_step_validator(OkResponseGate)
 process.add_next_step(GetRequestStep('http://localhost:8080/start')).add_step_validator(OkResponseGate)
 process.add_next_step(GetRequestStep('http://localhost:8080/gettoken'))\
-    .add_response_parser(VariableExtractor())\
+    .add_response_parser(VariableExtractor)\
     .add_step_validator(OkResponseGate)
 process.add_next_step(GetRequestStep('http://localhost:8080/validatetoken'))\
     .add_step_validator(BadRequestResponseGate)
