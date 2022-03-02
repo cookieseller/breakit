@@ -28,7 +28,8 @@ class Process:
                     parsed_result += parser.parse(result)
 
                 step_validator = process_data.get_step_validator()
-                if step_validator(parsed_result).is_valid():
+                validator = step_validator(parsed_result)
+                if validator.is_valid():
                     self.execute(process_data.get_step().get_identifier())
 
         except AttributeError:
