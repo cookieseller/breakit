@@ -16,6 +16,7 @@ class Process:
         self.tree = Tree()
         self.root = self.tree.create_node(identifier=self.ROOT_IDENTIFIER)
         self.last_added_identifier = self.ROOT_IDENTIFIER
+        self.default_response_parsers = []
 
     def execute(self, node_identifier: str = ROOT_IDENTIFIER) -> None:
         try:
@@ -38,6 +39,7 @@ class Process:
 
     def add_root_step(self, step: Step):
         process_step = self.ProcessStep(step)
+        process_step.add_multiple_response_parsers(self.default_response_parsers)
         self.tree.create_node(step.get_name(), step.get_identifier(), data=process_step, parent=self.ROOT_IDENTIFIER)
         self.last_added_identifier = step.get_identifier()
 
@@ -45,6 +47,7 @@ class Process:
 
     def add_next_step(self, step: Step):
         process_step = self.ProcessStep(step)
+        process_step.add_multiple_response_parsers(self.default_response_parsers)
         try:
             self.tree.create_node(step.get_name(), step.get_identifier(), data=process_step, parent=self.last_added_identifier)
         except DuplicatedNodeIdError:
@@ -56,6 +59,7 @@ class Process:
 
     def add_step_after(self, step: Step, previous_step: Step):
         process_step = self.ProcessStep(step)
+        process_step.add_multiple_response_parsers(self.default_response_parsers)
         try:
             self.tree.create_node(step.get_name(), step.get_identifier(), data=process_step, parent=previous_step.get_identifier())
         except DuplicatedNodeIdError:
@@ -64,6 +68,10 @@ class Process:
         self.last_added_identifier = step.get_identifier()
 
         return process_step
+
+    def add_default_response_parser(self, response_parser):
+        self.default_response_parsers.append(response_parser)
+        return self
 
     class ProcessStep:
         def __init__(self, step: Step) -> None:
@@ -78,6 +86,10 @@ class Process:
 
         def add_response_parser(self, response_parser: ResponseParser):
             self.response_parsers.append(response_parser)
+            return self
+
+        def add_multiple_response_parsers(self, response_parsers: List[ResponseParser]):
+            self.response_parsers.append(response_parsers)
             return self
 
         def get_step(self) -> Step:
