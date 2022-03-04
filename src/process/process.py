@@ -26,7 +26,7 @@ class Process:
                 parsed_result = {}
                 for response_parser in process_data.get_response_parsers():
                     parser = response_parser()
-                    parsed_result += parser.parse(result)
+                    parser.parse(result)
 
                 step_validator = process_data.get_step_validator()
                 validator = step_validator(parsed_result)
@@ -89,7 +89,7 @@ class Process:
             return self
 
         def add_multiple_response_parsers(self, response_parsers: List[ResponseParser]):
-            self.response_parsers.append(response_parsers)
+            self.response_parsers += response_parsers
             return self
 
         def get_step(self) -> Step:
