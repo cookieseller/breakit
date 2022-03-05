@@ -3,5 +3,5 @@ from abc import ABC, abstractmethod
 
 class ResponseParser(ABC):
     @abstractmethod
-    def parse(self, expression) -> bool:
+    def parse(self, expression) -> dict:
         pass

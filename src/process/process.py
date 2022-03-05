@@ -26,7 +26,7 @@ class Process:
                 parsed_result = {}
                 for response_parser in process_data.get_response_parsers():
                     parser = response_parser()
-                    parser.parse(result)
+                    parsed_result |= parser.parse(result)
 
                 step_validator = process_data.get_step_validator()
                 validator = step_validator(parsed_result)
