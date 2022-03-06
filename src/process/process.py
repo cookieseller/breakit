@@ -3,6 +3,7 @@ from typing import Final, List
 from treelib import Tree
 from treelib.exceptions import DuplicatedNodeIdError
 
+from src.process.step_validator.default_validator import DefaultValidator
 from src.process.step_validator.step_validator import StepValidator
 from src.process.response_parsers.response_parser import ResponseParser
 from src.process.step.step import Step
@@ -30,22 +31,14 @@ class Process:
 
                 step_validator = process_data.get_step_validator()
                 validator = step_validator(parsed_result)
-                if validator.is_valid():
+                if validator.is_valid() and process_data.get_step().get_identifier() is not None:
                     self.execute(process_data.get_step().get_identifier())
 
         except AttributeError:
             #should never happen if a step was added
             pass
 
-    def add_root_step(self, step: Step):
-        process_step = self.ProcessStep(step)
-        process_step.add_multiple_response_parsers(self.default_response_parsers)
-        self.tree.create_node(step.get_name(), step.get_identifier(), data=process_step, parent=self.ROOT_IDENTIFIER)
-        self.last_added_identifier = step.get_identifier()
-
-        return process_step
-
-    def add_next_step(self, step: Step):
+    def add_step(self, step: Step):
         process_step = self.ProcessStep(step)
         process_step.add_multiple_response_parsers(self.default_response_parsers)
         try:
@@ -78,9 +71,9 @@ class Process:
             super().__init__()
             self.step = step
             self.response_parsers = []
-            self.step_validator_class = None
+            self.step_validator_class = DefaultValidator
 
-        def add_step_validator(self, step_validator_class: StepValidator):
+        def set_step_validator(self, step_validator_class: StepValidator):
             self.step_validator_class = step_validator_class
             return self
 

@@ -2,8 +2,6 @@ from src.process.step_validator.step_validator import StepValidator
 
 
 class OkResponseGate(StepValidator):
-    def __init__(self, parsed_response):
-        self.status_code = parsed_response["response_code"] if "response_code" in parsed_response else None
-
     def is_valid(self) -> bool:
-        return self.status_code == 200
+        response_code = self.parsed_response["response_code"] if "response_code" in self.parsed_response else None
+        return response_code == 200
