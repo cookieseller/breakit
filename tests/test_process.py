@@ -2,6 +2,7 @@ from unittest import TestCase
 from unittest.mock import Mock
 
 from src.process.process import Process
+from src.process.step.get_request_step import GetRequestStep
 
 
 class TestProcess(TestCase):
@@ -71,3 +72,16 @@ class TestProcess(TestCase):
         step3.execute.assert_called_once()
         step4.execute.assert_not_called()
         step5.execute.assert_called_once()
+
+    def test_add_default_response_parser(self):
+        first_default_response_parser = Mock()
+        second_default_response_parser = Mock()
+        process = Process()
+        process.add_default_response_parser(first_default_response_parser)
+        process.add_default_response_parser(second_default_response_parser)
+
+        process_step = process.add_step(GetRequestStep('localhost'))
+        response_parsers = process_step.get_response_parsers()
+        self.assertEqual(2, len(response_parsers))
+        self.assertEqual(response_parsers[0], first_default_response_parser)
+        self.assertEqual(response_parsers[1], second_default_response_parser)
