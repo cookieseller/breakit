@@ -9,13 +9,16 @@ from src.process.response_parsers.json_variable_extractor import VariableExtract
 process = Process()
 process.add_default_response_parser(ResponseCodeExtractor)
 
-process.add_step(GetRequestStep('http://localhost:8080/')).set_step_validator(OkResponseGate)
-process.add_step(GetRequestStep('http://localhost:8080/start')).set_step_validator(OkResponseGate)
+process.add_step(GetRequestStep('http://localhost:8080/'))\
+    .set_step_validator(OkResponseGate)
+process.add_step(GetRequestStep('http://localhost:8080/start'))\
+    .set_step_validator(OkResponseGate)
 process.add_step(GetRequestStep('http://localhost:8080/gettoken'))\
     .add_response_parser(VariableExtractor)\
     .set_step_validator(OkResponseGate)
 process.add_step(GetRequestStep('http://localhost:8080/validatetoken'))\
     .set_step_validator(BadRequestResponseGate)
-process.add_step(GetRequestStep('http://localhost:8080/end')).set_step_validator(BadRequestResponseGate)
+process.add_step(GetRequestStep('http://localhost:8080/end'))\
+    .set_step_validator(BadRequestResponseGate)
 
 process.execute()
