@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class Mutator(ABC):
+class HeaderMutator(ABC):
     @abstractmethod
     def mutate(self, mutateable):
         pass
