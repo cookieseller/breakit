@@ -1,10 +1,11 @@
 import random
-from abc import ABC, abstractmethod
+from abc import abstractmethod
+
+from src.request.header.header_mutator import HeaderMutator
 
 
-class CommonHeaderMutator(ABC):
-    @abstractmethod
-    def mutate(self, mutateable):
+class CommonHeaderMutator(HeaderMutator):
+    def mutate(self, _=None):
         headers = [
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36",
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36",

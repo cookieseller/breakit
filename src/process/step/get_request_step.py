@@ -5,7 +5,7 @@ from src.request.request_factory import RequestFactory
 
 class GetRequestStep(Step):
 
-    def __init__(self, url: str, header_mutator: HeaderMutator) -> None:
+    def __init__(self, url: str, header_mutator: HeaderMutator = None) -> None:
         self.url = url
         self.header_mutator = header_mutator
 
