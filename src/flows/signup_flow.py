@@ -12,14 +12,14 @@ process.add_default_response_parser(ResponseCodeExtractor)
 
 process.add_step(GetRequestStep('http://localhost:8080/', CommonHeaderMutator()))\
     .set_step_validator(OkResponseGate)
-process.add_step(GetRequestStep('http://localhost:8080/start'))\
+process.add_step(GetRequestStep('http://localhost:8080/start', CommonHeaderMutator()))\
     .set_step_validator(OkResponseGate)
-process.add_step(GetRequestStep('http://localhost:8080/gettoken'))\
+process.add_step(GetRequestStep('http://localhost:8080/gettoken', CommonHeaderMutator()))\
     .add_response_parser(VariableExtractor)\
     .set_step_validator(OkResponseGate)
-process.add_step(GetRequestStep('http://localhost:8080/validatetoken'))\
+process.add_step(GetRequestStep('http://localhost:8080/validatetoken', CommonHeaderMutator()))\
     .set_step_validator(BadRequestResponseGate)
-process.add_step(GetRequestStep('http://localhost:8080/end'))\
+process.add_step(GetRequestStep('http://localhost:8080/end', CommonHeaderMutator()))\
     .set_step_validator(BadRequestResponseGate)
 
 process.execute()
