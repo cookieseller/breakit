@@ -13,4 +13,6 @@ class GetRequestStep(Step):
         return f"{self.get_name()}{self.url}"
 
     def execute(self):
-        return RequestFactory().create_get_request(self.url, self.header_mutator.mutate(''))
+        request = RequestFactory().create_get_request(self.url, self.header_mutator.mutate(''))
+
+        return request()

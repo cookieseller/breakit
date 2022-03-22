@@ -11,4 +11,4 @@ class VariableExtractor(ResponseParser):
         content = response.content
         self.variables = ast.literal_eval(content.decode('utf-8'))
 
-        return {}
+        return self.variables

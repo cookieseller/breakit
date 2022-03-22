@@ -36,7 +36,7 @@ class Process:
 
         except AttributeError:
             #should never happen if a step was added
-            pass
+            pass0
 
     def add_step(self, step: Step):
         process_step = self.ProcessStep(step)
