@@ -10,6 +10,7 @@ from src.request.header.common_header_mutator import CommonHeaderMutator
 process = Process()
 process.add_default_response_parser(ResponseCodeExtractor)
 
+# Add request body mutator
 process.add_step(GetRequestStep('http://localhost:8080/', CommonHeaderMutator()))\
     .set_step_validator(OkResponseGate)
 process.add_step(GetRequestStep('http://localhost:8080/start', CommonHeaderMutator()))\
