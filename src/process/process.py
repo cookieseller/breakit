@@ -24,14 +24,11 @@ class Process:
             for step in self.tree.children(node_identifier):
                 process_data = step.data
                 result = process_data.get_step().execute()
-                parsed_result = {}
                 for response_parser in process_data.get_response_parsers():
-                    parser = response_parser()
-                    parsed_result |= parser.parse(result)
+                    response_parser.parse(result)
 
                 step_validator = process_data.get_step_validator()
-                validator = step_validator(parsed_result)
-                if validator.is_valid() and process_data.get_step().get_identifier() is not None:
+                if step_validator.is_valid() and process_data.get_step().get_identifier() is not None:
                     self.execute(process_data.get_step().get_identifier())
 
         except AttributeError:

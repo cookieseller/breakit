@@ -1,4 +1,7 @@
-class Environment:
+from src.process.variable_storage.variable_storage import VariableStorage
+
+
+class Environment(VariableStorage):
     def __init__(self):
         self.store = {}
 
@@ -7,6 +10,9 @@ class Environment:
 
     def get_value(self, key):
         return self.store[key]
+
+    def has_value(self, key):
+        return key in self.store
 
     def get_keys(self):
         return self.store.keys()
