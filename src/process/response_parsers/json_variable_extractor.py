@@ -6,10 +6,11 @@ from src.process.variable_storage.variable_storage import VariableStorage
 
 class VariableExtractor(ResponseParser):
     def __init__(self, storage: VariableStorage):
-        self.variables = None
+        self.variable_storage = storage
 
     def parse(self, response):
         content = response.content
-        self.variables = ast.literal_eval(content.decode('utf-8'))
+        variables = ast.literal_eval(content.decode('utf-8'))
 
-        return self.variables
+        for key, value in variables.items():
+            self.variable_storage.set_value(key, value)
