@@ -1,5 +1,4 @@
 import random
-from abc import abstractmethod
 
 from src.request.header.header_mutator import HeaderMutator
 
